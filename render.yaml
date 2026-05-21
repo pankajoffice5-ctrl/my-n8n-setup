@@ -1,45 +1,20 @@
+# Exported from Render on 2026-05-21T16:09:10Z
+version: "1"
 services:
-  - type: web
-    name: n8n
-    env: docker
-    repo: https://github.com/n8n-io/n8n # Pulls directly from official n8n
-    plan: free # Change to 'starter' if you need more RAM later
-    region: oregon # Choose the region closest to you
-    envVars:
-      - key: N8N_HOST
-        sync: false # Render will ask you to type your URL here later
-      - key: N8N_PORT
-        value: 5678
-      - key: N8N_PROTOCOL
-        value: https
-      - key: NODE_ENV
-        value: production
-      - key: DB_TYPE
-        value: postgresdb
-      - key: DB_POSTGRESDB_HOST
-        fromDatabase:
-          name: n8n-db
-          property: host
-      - key: DB_POSTGRESDB_PORT
-        fromDatabase:
-          name: n8n-db
-          property: port
-      - key: DB_POSTGRESDB_DATABASE
-        fromDatabase:
-          name: n8n-db
-          property: database
-      - key: DB_POSTGRESDB_USER
-        fromDatabase:
-          name: n8n-db
-          property: user
-      - key: DB_POSTGRESDB_PASSWORD
-        fromDatabase:
-          name: n8n-db
-          property: password
-      - key: N8N_ENCRYPTION_KEY
-        generateValue: true # Automatically creates a secure key for you
-
-databases:
-  - name: n8n-db
-    plan: free
-    region: oregon
+- type: web
+  name: n8n1
+  runtime: image
+  image:
+    url: docker.io/library/nginx:latest
+  plan: free
+  envVars:
+  - key: N8N_ENCRYPTION_KEY
+    sync: false
+  - key: WEBHOOK_URL
+    sync: false
+  - key: N8N_PROTOCOL
+    sync: false
+  - key: N8N_HOST
+    sync: false
+  region: oregon
+  autoDeployTrigger: commit
